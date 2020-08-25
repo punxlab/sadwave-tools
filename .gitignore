@@ -8,5 +8,8 @@
 # Test binary, built with `go test -c`
 *.test
 
-# config
+# Configs
 */config.json
+
+# Bin folders
+*/bin/*
