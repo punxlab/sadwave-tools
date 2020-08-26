@@ -13,3 +13,6 @@
 
 # Bin folders
 */bin/*
+
+# Data files
+custom-photo-uploader/events-photos.csv

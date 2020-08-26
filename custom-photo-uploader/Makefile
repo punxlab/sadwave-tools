@@ -1,4 +1,4 @@
 .PHONY: build
 build:
 	$(info #Building...)
-	go build -o bin/main main.go
+	go build -o bin/custom_photo_uploader main.go

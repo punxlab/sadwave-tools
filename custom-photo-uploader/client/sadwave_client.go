@@ -6,15 +6,14 @@ import (
 	"github.com/pkg/errors"
 	"net/http"
 	"net/url"
-	"path"
 )
 
 type SadwaveClient struct {
-	url *url.URL
+	host string
 }
 
-func NewSadwaveClient(url *url.URL) *SadwaveClient {
-	return &SadwaveClient{url: url}
+func NewSadwaveClient(host string) *SadwaveClient {
+	return &SadwaveClient{host: host}
 }
 
 func (c *SadwaveClient) SetCustomPhoto(eventUrl *url.URL, photoUrl *url.URL) error {
@@ -27,7 +26,8 @@ func (c *SadwaveClient) SetCustomPhoto(eventUrl *url.URL, photoUrl *url.URL) err
 		return errors.Wrap(err, "marshal request body")
 	}
 
-	resp, err := http.Post(path.Join(c.url.Path, "api/photos"), "application/json", bytes.NewBuffer(body))
+	reqUrl := c.host + "/api/photos"
+	resp, err := http.Post(reqUrl, "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		return errors.Wrap(err, "post request")
 	}

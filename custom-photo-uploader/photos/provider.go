@@ -3,6 +3,8 @@ package photos
 import (
 	"encoding/csv"
 	"image"
+	_ "image/jpeg"
+	_ "image/png"
 	"net/http"
 	"net/url"
 	"os"
@@ -52,26 +54,32 @@ func readCSV(path string) ([][]string, error) {
 }
 
 func validateCSV(lines [][]string) error {
+	if len(lines) == 0 {
+		return errors.New("empty csv")
+	}
+
 	for i, l := range lines {
+		lineNumber := i + 1
+
 		if len(l) != 2 {
-			return errors.Errorf("incorrect format: line %d should contains 2 values", i)
+			return errors.Errorf("incorrect format: line %d should contains 2 values", lineNumber)
 		}
 
 		if strings.TrimSpace(l[0]) == "" {
-			return errors.Errorf("invalid value: the 1st value of line %d is required", i)
+			return errors.Errorf("invalid value: the 1st value of line %d is required", lineNumber)
 		}
 
 		if !govalidator.IsURL(l[0]) {
-			return errors.Errorf("invalid value: the 1st value of line %d should be an URL", i)
+			return errors.Errorf("invalid value: the 1st value of line %d should be an URL", lineNumber)
 		}
 
 		if strings.TrimSpace(l[1]) != "" {
 			if !govalidator.IsURL(l[1]) {
-				return errors.Errorf("invalid value: the 2d value of line %d can be empty or an URL", i)
+				return errors.Errorf("invalid value: the 2d value of line %d can be empty or an URL", lineNumber)
 			}
 
 			if err := validateImageByUrl(l[1]); err != nil {
-				return errors.Wrapf(err, "invalid value: the 2d value of line %d contains invalid URL", i)
+				return errors.Wrapf(err, "invalid value: the 2d value of line %d contains invalid URL", lineNumber)
 			}
 		}
 	}

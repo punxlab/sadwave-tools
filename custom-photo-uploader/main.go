@@ -3,12 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
-	"os"
-
 	"github.com/punxlab/sadwave-tools/custom-photo-uploader/client"
 	"github.com/punxlab/sadwave-tools/custom-photo-uploader/config"
 	"github.com/punxlab/sadwave-tools/custom-photo-uploader/photos"
+	"log"
+	"os"
 )
 
 func main() {
@@ -18,6 +17,8 @@ func main() {
 		return
 	}
 
+	cl := client.NewSadwaveClient(cfg.API)
+
 	pts, err := photos.FromCSV(cfg.SourceCSVPath)
 	if err != nil {
 		printAndWait(err.Error())
@@ -26,7 +27,7 @@ func main() {
 
 	for _, p := range pts {
 		log.Println(fmt.Sprintf("uploading photo %s for event %s", p.EventUrl, p.PhotoUrl))
-		err := client.NewSadwaveClient(cfg.API).SetCustomPhoto(p.EventUrl, p.PhotoUrl)
+		err := cl.SetCustomPhoto(p.EventUrl, p.PhotoUrl)
 		if err != nil {
 			log.Println(err)
 		}
