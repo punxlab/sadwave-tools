@@ -133,7 +133,7 @@ func convertToModel(lines [][]string) ([]*EventPhoto, error) {
 			return nil, err
 		}
 
-		photoUrl, err := url.Parse(l[0])
+		photoUrl, err := url.Parse(l[1])
 		if err != nil {
 			return nil, err
 		}
